@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "hubmod:block/hub_down",
+    "up": "hubmod:block/hub_up",
+    "down": "hubmod:block/hub_down",
+    "north": "hubmod:block/hub_north",
+    "south": "hubmod:block/hub_south",
+    "west": "hubmod:block/hub_west",
+    "east": "hubmod:block/hub_east"
+  }
+}

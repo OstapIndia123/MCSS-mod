@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "hubmod",
+  "version": "2.0.0",
+  "name": "MCSS",
+  "description": "Minecraft Security system with Websocket integration",
+  "authors": ["Ostap_India"],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.example.hubmod.HubMod"
+    ],
+    "client": [
+      "com.example.hubmod.HubModClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.2",
+    "fabric-api": "*",
+    "minecraft": "1.21.11"
+  }
+}
