@@ -22,12 +22,19 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"hubmod" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
 	}
 
+}
+
+sourceSets {
+	client {
+		java.srcDir "src/client/java"
+		resources.srcDir "src/client/resources"
+	}
 }
 
 configurations {
