@@ -30,6 +30,10 @@ loom {
 
 }
 
+configurations {
+	embed
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -39,9 +43,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-        implementation "com.google.code.gson:gson:2.11.0"	
+        implementation "com.google.code.gson:gson:2.11.0"
         modClientImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         implementation "org.yaml:snakeyaml:2.2"
+        embed "org.yaml:snakeyaml:2.2"
 }
 
 processResources {
@@ -71,6 +76,10 @@ jar {
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+
+	from {
+		configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 	}
 }
 
