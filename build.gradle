@@ -22,12 +22,23 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"hubmod" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
 	}
 
+}
+
+sourceSets {
+	client {
+		java.srcDir "src/client/java"
+		resources.srcDir "src/client/resources"
+	}
+}
+
+configurations {
+	embed
 }
 
 dependencies {
@@ -39,9 +50,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-        implementation "com.google.code.gson:gson:2.11.0"	
+        implementation "com.google.code.gson:gson:2.11.0"
         modClientImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
         implementation "org.yaml:snakeyaml:2.2"
+        embed "org.yaml:snakeyaml:2.2"
 }
 
 processResources {
@@ -71,6 +83,10 @@ jar {
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+
+	from {
+		configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
 	}
 }
 
