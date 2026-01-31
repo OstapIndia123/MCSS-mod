@@ -31,6 +31,7 @@ public final class ModItemGroups {
         // Добавляем в него предметы
         ItemGroupEvents.modifyEntriesEvent(HUB_TAB_KEY).register(entries -> {
             entries.accept(ModBlocks.HUB_BLOCK);
+            entries.accept(ModBlocks.HUB_EXTENSION_BLOCK);
             entries.accept(ModBlocks.READER_BLOCK);
         });
 
