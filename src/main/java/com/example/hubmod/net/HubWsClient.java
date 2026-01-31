@@ -249,12 +249,12 @@ public final class HubWsClient {
         final int outLevel = lvl;
 
         ServerRef.runOnServerThread(() -> {
-            HubBlockEntity hub = findLoadedHub(hid);
+            Object hub = findLoadedHub(hid);
             if (hub == null) {
                 com.example.hubmod.util.HubLog.d("[HUB][WS][SET_OUTPUT] hub not found in LOADED: " + hid);
                 return;
             }
-            hub.setOutput(d, outLevel);
+            applyHubOutput(hub, d, outLevel);
         });
 
         // если нужно авто-выключение
@@ -271,9 +271,9 @@ public final class HubWsClient {
                 final Direction d2 = dir;
 
                 ServerRef.runOnServerThread(() -> {
-                    HubBlockEntity hub = findLoadedHub(hid2);
+                    Object hub = findLoadedHub(hid2);
                     if (hub == null) return;
-                    hub.setOutput(d2, 0);
+                    applyHubOutput(hub, d2, 0);
                 });
             }, dur, TimeUnit.MILLISECONDS);
         }
@@ -326,14 +326,28 @@ public final class HubWsClient {
 
     }
 
-    private static HubBlockEntity findLoadedHub(String hubId) {
+    private static Object findLoadedHub(String hubId) {
         for (HubBlockEntity h : HubBlockEntity.loaded()) {
             if (h == null) continue;
             String id = h.getHubId();
             if (id == null || id.isBlank()) continue;
             if (id.equalsIgnoreCase(hubId)) return h;
         }
+        for (com.example.hubmod.blockentity.HubExtensionBlockEntity h : com.example.hubmod.blockentity.HubExtensionBlockEntity.loaded()) {
+            if (h == null) continue;
+            String id = h.getHubId();
+            if (id == null || id.isBlank()) continue;
+            if (id.equalsIgnoreCase(hubId)) return h;
+        }
         return null;
+    }
+
+    private static void applyHubOutput(Object hub, Direction dir, int level) {
+        if (hub instanceof HubBlockEntity h) {
+            h.setOutput(dir, level);
+        } else if (hub instanceof com.example.hubmod.blockentity.HubExtensionBlockEntity h) {
+            h.setOutput(dir, level);
+        }
     }
 
     private static ReaderBlockEntity findLoadedReader(String readerId) {

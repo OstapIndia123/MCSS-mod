@@ -12,6 +12,7 @@ public final class ModBlockEntities {
     private ModBlockEntities() {}
 
     public static BlockEntityType<HubBlockEntity> HUB_BLOCK_ENTITY;
+    public static BlockEntityType<HubExtensionBlockEntity> HUB_EXTENSION_BLOCK_ENTITY;
     public static BlockEntityType<ReaderBlockEntity> READER_BLOCK_ENTITY;
 
     public static void register() {
@@ -19,6 +20,12 @@ public final class ModBlockEntities {
                 BuiltInRegistries.BLOCK_ENTITY_TYPE,
                 Identifier.fromNamespaceAndPath(HubMod.MOD_ID, "hub_be"),
                 FabricBlockEntityTypeBuilder.create(HubBlockEntity::new, ModBlocks.HUB_BLOCK).build()
+        );
+
+        HUB_EXTENSION_BLOCK_ENTITY = Registry.register(
+                BuiltInRegistries.BLOCK_ENTITY_TYPE,
+                Identifier.fromNamespaceAndPath(HubMod.MOD_ID, "hub_extension_be"),
+                FabricBlockEntityTypeBuilder.create(HubExtensionBlockEntity::new, ModBlocks.HUB_EXTENSION_BLOCK).build()
         );
 
         READER_BLOCK_ENTITY = Registry.register(

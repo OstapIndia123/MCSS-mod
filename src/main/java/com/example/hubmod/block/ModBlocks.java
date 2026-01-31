@@ -2,6 +2,7 @@ package com.example.hubmod.block;
 
 import com.example.hubmod.HubMod;
 import com.example.hubmod.item.HubBlockItem;
+import com.example.hubmod.item.HubExtensionBlockItem;
 import com.example.hubmod.item.ReaderBlockItem;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,6 +27,17 @@ public final class ModBlocks {
                     .setId(HUB_BLOCK_KEY)
     );
 
+    // --- HUB EXTENSION ---
+    public static final Identifier HUB_EXTENSION_ID = Identifier.fromNamespaceAndPath(HubMod.MOD_ID, "hub_extension");
+    public static final ResourceKey<Block> HUB_EXTENSION_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, HUB_EXTENSION_ID);
+    public static final ResourceKey<Item>  HUB_EXTENSION_ITEM_KEY  = ResourceKey.create(Registries.ITEM, HUB_EXTENSION_ID);
+
+    public static final Block HUB_EXTENSION_BLOCK = new HubExtensionBlock(
+            BlockBehaviour.Properties.of()
+                    .strength(10.0f, 15.0f)
+                    .setId(HUB_EXTENSION_BLOCK_KEY)
+    );
+
     // --- READER ---
     public static final Identifier READER_ID = Identifier.fromNamespaceAndPath(HubMod.MOD_ID, "reader");
     public static final ResourceKey<Block> READER_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, READER_ID);
@@ -44,6 +56,14 @@ public final class ModBlocks {
                 BuiltInRegistries.ITEM,
                 HUB_ID,
                 new HubBlockItem(HUB_BLOCK, new Item.Properties().setId(HUB_ITEM_KEY))
+        );
+
+        // HUB EXTENSION
+        Registry.register(BuiltInRegistries.BLOCK, HUB_EXTENSION_ID, HUB_EXTENSION_BLOCK);
+        Registry.register(
+                BuiltInRegistries.ITEM,
+                HUB_EXTENSION_ID,
+                new HubExtensionBlockItem(HUB_EXTENSION_BLOCK, new Item.Properties().setId(HUB_EXTENSION_ITEM_KEY))
         );
 
         // READER
