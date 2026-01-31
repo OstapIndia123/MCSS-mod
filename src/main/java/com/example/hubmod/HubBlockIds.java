@@ -6,7 +6,12 @@ public final class HubBlockIds {
     private HubBlockIds() {}
 
     public static String newId() {
-        return "HUB-" + UUID.randomUUID();
+        return newId("HUB-");
+    }
+
+    public static String newId(String prefix) {
+        String safePrefix = (prefix == null || prefix.isBlank()) ? "HUB-" : prefix;
+        return safePrefix + UUID.randomUUID();
     }
 
     public static String newExtensionId() {

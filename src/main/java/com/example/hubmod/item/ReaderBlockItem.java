@@ -42,7 +42,7 @@ public class ReaderBlockItem extends BlockItem {
         String cur = getReaderId(stack);
         if (cur != null) return cur;
 
-        String id = HubBlockIds.newId().replace("HUB-", "READER-");
+        String id = HubBlockIds.newId("READER-");
         setReaderId(stack, id);
         return id;
     }
