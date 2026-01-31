@@ -54,7 +54,7 @@ public class ReaderBlockEntity extends BlockEntity {
 
     public String ensureReaderId() {
         if (readerId != null && !readerId.isBlank()) return readerId;
-        readerId = HubBlockIds.newId().replace("HUB-", "READER-");
+        readerId = HubBlockIds.newId("READER-");
         setChanged();
         return readerId;
     }
