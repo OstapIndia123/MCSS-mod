@@ -1,2 +1,32 @@
-/.gradle/
-/build/
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Compiled outputs
+/out/
+/bin/
+/classes/
+
+# Fabric dev run dirs
+/run/
+/remappedSrc/
+/.loom/
+
+# Config/runtime data
+/config/
+*.log
+log.txt
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
