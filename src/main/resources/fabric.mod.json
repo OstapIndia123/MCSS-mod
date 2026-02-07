@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "hubmod",
-  "version": "2.0.0",
+  "version": "2.9.0",
   "name": "MCSS",
   "description": "Minecraft Security system with Websocket integration",
   "authors": ["Ostap_India"],

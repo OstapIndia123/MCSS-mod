@@ -9,7 +9,7 @@
         "n": "minecraft:iron_block",
         "R": "minecraft:redstone_block",
         "K": "minecraft:repeater",
-        "E": "minecraft:ender_eye",
+        "E": "minecraft:gold_ingot",
         "C": "minecraft:comparator"
     },
     "result": {

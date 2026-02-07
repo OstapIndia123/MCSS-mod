@@ -1,8 +1,8 @@
 {
   "block.hubmod.hub": "Охранный ППК",
-  "block.hubmod.hub_extension": "Расширение охранного ППК",
+  "block.hubmod.hub_extension": "Модуль расширения ППК",
   "item.hubmod.hub": "Охранный ППК",
-  "item.hubmod.hub_extension": "Расширение охранного ППК",
+  "item.hubmod.hub_extension": "Модуль расширения ППК",
   "itemGroup.hubmod": "MCSS",
   "item.hubmod.reader": "Считыватель ТМ"
 }
