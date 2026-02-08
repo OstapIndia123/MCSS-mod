@@ -4,7 +4,7 @@
   "version": "2.9.0",
   "name": "MCSS",
   "description": "Minecraft Security system with Websocket integration",
-  "authors": ["Ostap_India"],
+  "authors": ["Ostap_India", "ADAMADA8"],
   "environment": "*",
   "entrypoints": {
     "main": [
