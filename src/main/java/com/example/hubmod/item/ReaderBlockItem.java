@@ -4,12 +4,18 @@ import com.example.hubmod.HubBlockIds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
+
+import static com.example.hubmod.util.HubComponents.idCopy;
 
 public class ReaderBlockItem extends BlockItem {
     private static final String KEY = "readerId";
@@ -62,5 +68,17 @@ public class ReaderBlockItem extends BlockItem {
         if (id == null) return base;
 
         return base.copy().append(Component.literal(" (" + id + ")").withStyle(ChatFormatting.DARK_GRAY));
+    }
+
+    @Override
+    protected boolean placeBlock(@NotNull net.minecraft.world.item.context.BlockPlaceContext context, @NotNull net.minecraft.world.level.block.state.BlockState blockState) {
+        if (!super.placeBlock(context, blockState)) return false;
+        Player player = context.getPlayer();
+        if (player != null && !player.level().isClientSide()) {
+            String id = ensureReaderId(context.getItemInHand());
+
+            idCopy(player, id);
+        }
+        return true;
     }
 }

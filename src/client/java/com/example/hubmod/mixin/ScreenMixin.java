@@ -17,14 +17,17 @@ public class ScreenMixin {
 
     @Inject(method = "defaultHandleClickEvent", at = @At("HEAD"))
     private static void onClickEvent(ClickEvent clickEvent, Minecraft minecraft, Screen screen, CallbackInfo ci) {
-        getLogger().info("ClickEvent detected: {}", clickEvent);
-        if (clickEvent instanceof ClickEvent.CopyToClipboard) {
-            if (minecraft.player != null) {
-                minecraft.player.displayClientMessage(
-                        Component.literal("✓ Скопировано")
-                                .withStyle(ChatFormatting.GREEN),
-                        true  // показать над hotbar
-                );
+        if (clickEvent instanceof ClickEvent.CopyToClipboard(String value)) {
+            getLogger().info("CopyToClipboard event detected with value: " + value);
+            // Проверяем что это UUID (формат Hub ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+            if (value.matches("[A-Z]+-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")) {
+                if (minecraft.player != null) {
+                    minecraft.player.displayClientMessage(
+                            Component.translatable("message.hub_id_copied")
+                                    .withStyle(ChatFormatting.GREEN),
+                            true
+                    );
+                }
             }
         }
     }

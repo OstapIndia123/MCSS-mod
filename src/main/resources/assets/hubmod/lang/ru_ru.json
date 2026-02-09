@@ -4,5 +4,7 @@
   "item.hubmod.hub": "Охранный ППК",
   "item.hubmod.hub_extension": "Модуль расширения ППК",
   "itemGroup.hubmod": "MCSS",
-  "item.hubmod.reader": "Считыватель ТМ"
+  "item.hubmod.reader": "Считыватель ТМ",
+  "interaction.click_to_copy": "Нажмите для копирования",
+  "message.hub_id_copied": "✓ ID скопирован"
 }

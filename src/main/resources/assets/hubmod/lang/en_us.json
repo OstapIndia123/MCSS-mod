@@ -4,5 +4,7 @@
   "item.hubmod.hub": "Security Hub",
   "item.hubmod.hub_extension": "Security Hub Extension",
   "itemGroup.hubmod": "MCSS",
-  "item.hubmod.reader": "TM Reader"
+  "item.hubmod.reader": "TM Reader",
+  "interaction.click_to_copy": "Click to copy",
+  "message.hub_id_copied": "✓ ID copied"
 }
