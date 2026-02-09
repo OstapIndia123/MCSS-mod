@@ -96,7 +96,8 @@ public final class HubModConfig {
             try (OutputStreamWriter w = new OutputStreamWriter(Files.newOutputStream(file), StandardCharsets.UTF_8)) {
                 yaml.dump(root, w);
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     private static boolean asBool(Object o, boolean def) {
@@ -114,7 +115,10 @@ public final class HubModConfig {
     private static long asLong(Object o, long def) {
         if (o instanceof Number n) return n.longValue();
         if (o instanceof String s) {
-            try { return Long.parseLong(s.trim()); } catch (Throwable ignored) {}
+            try {
+                return Long.parseLong(s.trim());
+            } catch (Throwable ignored) {
+            }
         }
         return def;
     }

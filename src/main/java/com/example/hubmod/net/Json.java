@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public final class Json {
-    private Json() {}
+    private Json() {
+    }
 
     public static String minify(Map<String, Object> map) {
         StringBuilder sb = new StringBuilder();
@@ -17,7 +18,7 @@ public final class Json {
         if (v == null) {
             sb.append("null");
         } else if (v instanceof Number || v instanceof Boolean) {
-            sb.append(v.toString());
+            sb.append(v);
         } else if (v instanceof String) {
             sb.append('"').append(escape((String) v)).append('"');
         } else if (v instanceof Map) {

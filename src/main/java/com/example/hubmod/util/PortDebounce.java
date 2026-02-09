@@ -7,7 +7,6 @@ public final class PortDebounce {
     private int lastRaw = Integer.MIN_VALUE;
     private int stable = 0;
     private int sameCount = 0;
-    private boolean changed = false;
 
     public PortDebounce(int stableTicksNeeded) {
         this.stableTicksNeeded = Math.max(1, stableTicksNeeded);
@@ -17,7 +16,7 @@ public final class PortDebounce {
      * @return true if stable value changed
      */
     public boolean update(int raw) {
-        changed = false;
+        boolean changed = false;
 
         if (raw != lastRaw) {
             lastRaw = raw;

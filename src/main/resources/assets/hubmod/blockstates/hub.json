@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "hubmod:block/hub" }
+    "": {
+      "model": "hubmod:block/hub"
+    }
   }
 }

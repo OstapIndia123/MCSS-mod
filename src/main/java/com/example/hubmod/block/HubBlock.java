@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import org.jspecify.annotations.NonNull;
 
 public class HubBlock extends Block implements EntityBlock {
 
@@ -47,12 +48,12 @@ public class HubBlock extends Block implements EntityBlock {
     // --- Redstone output ---
 
     @Override
-    public boolean isSignalSource(BlockState state) {
+    public boolean isSignalSource(@NonNull BlockState state) {
         return true;
     }
 
     @Override
-    public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir) {
+    public int getSignal(@NonNull BlockState state, BlockGetter level, @NonNull BlockPos pos, @NonNull Direction dir) {
         // Сила сигнала 0..15 берётся из BlockEntity, а не из булевок
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof HubBlockEntity hub) {
@@ -62,19 +63,19 @@ public class HubBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir) {
+    public int getDirectSignal(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull Direction dir) {
         return getSignal(state, level, pos, dir);
     }
 
     // --- BlockEntity ---
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new HubBlockEntity(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> type) {
         if (level.isClientSide()) return null;
         return (lvl, p, st, be) -> {
             if (be instanceof HubBlockEntity hub) HubBlockEntity.tickServer(lvl, p, st, hub);
@@ -82,7 +83,7 @@ public class HubBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, LivingEntity placer, @NonNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
         if (!level.isClientSide()) {

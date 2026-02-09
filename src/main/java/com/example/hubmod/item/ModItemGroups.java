@@ -24,6 +24,9 @@ public final class ModItemGroups {
             .icon(() -> new ItemStack(ModBlocks.HUB_BLOCK))
             .build();
 
+    private ModItemGroups() {
+    }
+
     public static void register() {
         // Регистрируем хаб
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, HUB_TAB_KEY, HUB_TAB);
@@ -41,6 +44,4 @@ public final class ModItemGroups {
     private static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(HubMod.MOD_ID, path);
     }
-
-    private ModItemGroups() {}
 }

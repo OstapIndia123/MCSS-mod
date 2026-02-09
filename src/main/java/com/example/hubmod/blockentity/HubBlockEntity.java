@@ -10,7 +10,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,86 +22,32 @@ public class HubBlockEntity extends BlockEntity {
     private static final String NBT_HUB_ID = "hubId";
 
     private static final Set<HubBlockEntity> LOADED = ConcurrentHashMap.newKeySet();
-    public static Set<HubBlockEntity> loaded() { return LOADED; }
-
     // редстоун-сэмплинг: раз в 2 тика (можно 2-5)
     private static final int SAMPLE_TICKS = 2;
-    private int sampleCounter = 0;
-
-    // Пинг вычисляется динамически из конфига: pingMs = min(60s, failAfter/3), но не меньше 5s
-    private int pingCounterTicks = 0;
-
-    private boolean registered = false;
-
     // последнее значение по каждой стороне (для change-detect)
     private final int[] lastIn = new int[6];
-
     // ВЫХОДЫ (0..15) по сторонам — именно это будет отдавать HubBlock#getSignal()
     private final int[] outLevels = new int[6];
-
+    private int sampleCounter = 0;
+    // Пинг вычисляется динамически из конфига: pingMs = min(60s, failAfter/3), но не меньше 5s
+    private int pingCounterTicks = 0;
+    private boolean registered = false;
     // ID конкретного хаба (переносится из предмета при установке)
     private String hubId;
 
     public HubBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HUB_BLOCK_ENTITY, pos, state);
-        for (int i = 0; i < lastIn.length; i++) lastIn[i] = Integer.MIN_VALUE;
-        for (int i = 0; i < outLevels.length; i++) outLevels[i] = 0;
+        Arrays.fill(lastIn, Integer.MIN_VALUE);
+        Arrays.fill(outLevels, 0);
+    }
+
+    public static Set<HubBlockEntity> loaded() {
+        return LOADED;
     }
 
     // Нужно для вызова из BlockEntityTicker
     public static void tickServer(Level level, BlockPos pos, BlockState state, HubBlockEntity hub) {
         hub.tickServer();
-    }
-
-    @Override
-    public void setRemoved() {
-        LOADED.remove(this);
-        super.setRemoved();
-    }
-
-    public void setHubId(String id) {
-        if (id == null || id.isBlank()) return;
-        this.hubId = id;
-        setChanged();
-    }
-
-    public String getHubId() {
-        return hubId;
-    }
-
-    public String ensureHubId() {
-        if (hubId != null && !hubId.isBlank()) return hubId;
-        hubId = HubBlockIds.newId();
-        setChanged();
-        return hubId;
-    }
-
-    // Выходной уровень для конкретной стороны (0..15)
-    public int getOutputLevel(Direction dir) {
-        if (dir == null) return 0;
-        int v = outLevels[dir.ordinal()];
-        if (v < 0) return 0;
-        if (v > 15) return 15;
-        return v;
-    }
-
-    // ===== NBT (1.21.11): ValueInput/ValueOutput =====
-
-    @Override
-    protected void loadAdditional(ValueInput in) {
-        super.loadAdditional(in);
-
-        String id = in.getString(NBT_HUB_ID).orElse("");
-        this.hubId = id.isBlank() ? null : id;
-    }
-
-    @Override
-    protected void saveAdditional(ValueOutput out) {
-        super.saveAdditional(out);
-
-        if (hubId != null && !hubId.isBlank()) {
-            out.putString(NBT_HUB_ID, hubId);
-        }
     }
 
     private static int msToTicks(long ms) {
@@ -131,6 +79,57 @@ public class HubBlockEntity extends BlockEntity {
         if (pingMs > failAfter) pingMs = failAfter;
 
         return msToTicks(pingMs);
+    }
+
+    @Override
+    public void setRemoved() {
+        LOADED.remove(this);
+        super.setRemoved();
+    }
+
+    public String getHubId() {
+        return hubId;
+    }
+
+    // ===== NBT (1.21.11): ValueInput/ValueOutput =====
+
+    public void setHubId(String id) {
+        if (id == null || id.isBlank()) return;
+        this.hubId = id;
+        setChanged();
+    }
+
+    public String ensureHubId() {
+        if (hubId != null && !hubId.isBlank()) return hubId;
+        hubId = HubBlockIds.newId();
+        setChanged();
+        return hubId;
+    }
+
+    // Выходной уровень для конкретной стороны (0..15)
+    public int getOutputLevel(Direction dir) {
+        if (dir == null) return 0;
+        int v = outLevels[dir.ordinal()];
+        if (v < 0) return 0;
+        if (v > 15) return 15;
+        return v;
+    }
+
+    @Override
+    protected void loadAdditional(@NonNull ValueInput in) {
+        super.loadAdditional(in);
+
+        String id = in.getString(NBT_HUB_ID).orElse("");
+        this.hubId = id.isBlank() ? null : id;
+    }
+
+    @Override
+    protected void saveAdditional(@NonNull ValueOutput out) {
+        super.saveAdditional(out);
+
+        if (hubId != null && !hubId.isBlank()) {
+            out.putString(NBT_HUB_ID, hubId);
+        }
     }
 
     // ===== main tick =====

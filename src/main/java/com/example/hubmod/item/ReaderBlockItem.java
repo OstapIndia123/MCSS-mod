@@ -4,16 +4,14 @@ import com.example.hubmod.HubBlockIds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.HoverEvent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import static com.example.hubmod.util.HubComponents.idCopy;
 
@@ -24,7 +22,9 @@ public class ReaderBlockItem extends BlockItem {
         super(block, props);
     }
 
-    /** Вытащить readerId из предмета (если нет — вернёт null) */
+    /**
+     * Вытащить readerId из предмета (если нет — вернёт null)
+     */
     public static String getReaderId(ItemStack stack) {
         CustomData cd = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         CompoundTag tag = cd.copyTag();
@@ -32,7 +32,9 @@ public class ReaderBlockItem extends BlockItem {
         return id.isEmpty() ? null : id;
     }
 
-    /** Записать readerId в предмет */
+    /**
+     * Записать readerId в предмет
+     */
     public static void setReaderId(ItemStack stack, String readerId) {
         if (readerId == null || readerId.isBlank()) return;
 
@@ -43,7 +45,9 @@ public class ReaderBlockItem extends BlockItem {
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
     }
 
-    /** Если readerId отсутствует — сгенерировать */
+    /**
+     * Если readerId отсутствует — сгенерировать
+     */
     public static String ensureReaderId(ItemStack stack) {
         String cur = getReaderId(stack);
         if (cur != null) return cur;
@@ -53,16 +57,20 @@ public class ReaderBlockItem extends BlockItem {
         return id;
     }
 
-    /** Генерация при крафте */
+    /**
+     * Генерация при крафте
+     */
     @Override
-    public void onCraftedBy(ItemStack stack, Player player) {
+    public void onCraftedBy(@NonNull ItemStack stack, @NonNull Player player) {
         super.onCraftedBy(stack, player);
         ensureReaderId(stack);
     }
 
-    /** Вывод ID прямо в имя предмета */
+    /**
+     * Вывод ID прямо в имя предмета
+     */
     @Override
-    public Component getName(ItemStack stack) {
+    public @NonNull Component getName(@NonNull ItemStack stack) {
         Component base = super.getName(stack);
         String id = getReaderId(stack);
         if (id == null) return base;
@@ -70,6 +78,7 @@ public class ReaderBlockItem extends BlockItem {
         return base.copy().append(Component.literal(" (" + id + ")").withStyle(ChatFormatting.DARK_GRAY));
     }
 
+    @SuppressWarnings("resource")
     @Override
     protected boolean placeBlock(@NotNull net.minecraft.world.item.context.BlockPlaceContext context, @NotNull net.minecraft.world.level.block.state.BlockState blockState) {
         if (!super.placeBlock(context, blockState)) return false;

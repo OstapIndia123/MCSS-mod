@@ -9,11 +9,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public final class ModBlockEntities {
-    private ModBlockEntities() {}
-
     public static BlockEntityType<HubBlockEntity> HUB_BLOCK_ENTITY;
     public static BlockEntityType<HubExtensionBlockEntity> HUB_EXTENSION_BLOCK_ENTITY;
     public static BlockEntityType<ReaderBlockEntity> READER_BLOCK_ENTITY;
+    private ModBlockEntities() {
+    }
 
     public static void register() {
         HUB_BLOCK_ENTITY = Registry.register(

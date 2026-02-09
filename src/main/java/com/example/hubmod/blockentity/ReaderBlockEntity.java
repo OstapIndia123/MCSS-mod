@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,17 +20,17 @@ public class ReaderBlockEntity extends BlockEntity {
     private static final String NBT_OUT_LEVEL = "outLevel";
 
     private static final Set<ReaderBlockEntity> LOADED = ConcurrentHashMap.newKeySet();
-    public static Set<ReaderBlockEntity> loaded() { return LOADED; }
-
     private boolean registered = false;
-
     private String readerId;
-
     // выход 0..15 (как у Hub)
     private int outLevel = 0;
 
     public ReaderBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.READER_BLOCK_ENTITY, pos, state);
+    }
+
+    public static Set<ReaderBlockEntity> loaded() {
+        return LOADED;
     }
 
     public static void tickServer(Level level, BlockPos pos, BlockState state, ReaderBlockEntity reader) {
@@ -103,7 +104,7 @@ public class ReaderBlockEntity extends BlockEntity {
     // ===== NBT (ValueInput/ValueOutput) =====
 
     @Override
-    protected void loadAdditional(ValueInput in) {
+    protected void loadAdditional(@NonNull ValueInput in) {
         super.loadAdditional(in);
 
         String id = in.getString(NBT_READER_ID).orElse("");
@@ -114,7 +115,7 @@ public class ReaderBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(ValueOutput out) {
+    protected void saveAdditional(@NonNull ValueOutput out) {
         super.saveAdditional(out);
 
         if (readerId != null && !readerId.isBlank()) {

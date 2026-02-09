@@ -22,47 +22,40 @@ import java.util.regex.Pattern;
 
 public final class HubWsClient {
 
-    private static String wsUrl() {
-        return HubModConfig.get().wsUrl;
-    }
-
     // это ID клиента (не хаба). хабов может быть несколько.
     private static final String CLIENT_ID = "client-" + UUID.randomUUID();
-
     private static final int HEARTBEAT_SEC = 10;
     private static final int RECONNECT_MIN_SEC = 2;
     private static final int RECONNECT_MAX_SEC = 30;
-
     private static final HttpClient HTTP = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(5))
             .build();
-
     private static final ScheduledExecutorService SCHED = Executors.newScheduledThreadPool(2, r -> {
         Thread t = new Thread(r, "hub-ws");
         t.setDaemon(true);
         return t;
     });
-
     private static final Queue<String> OUTBOX = new ConcurrentLinkedQueue<>();
-    private static volatile WebSocket ws;
     private static final AtomicBoolean connecting = new AtomicBoolean(false);
-
-    private static volatile int reconnectDelaySec = RECONNECT_MIN_SEC;
-
     // защита от конфликтов таймера durationMs: ключ = hubId|side, значение = token
     private static final ConcurrentHashMap<String, Long> OUTPUT_TOKENS = new ConcurrentHashMap<>();
-
     // --- regexes (ленивый парсер, НЕ трогаем ts вообще) ---
-    private static final Pattern P_TYPE    = Pattern.compile("\"type\"\\s*:\\s*\"([^\"]+)\"");
-    private static final Pattern P_HUBID   = Pattern.compile("\"hubId\"\\s*:\\s*\"([^\"]+)\"");
-    private static final Pattern P_READER  = Pattern.compile("\"readerId\"\\s*:\\s*\"([^\"]+)\"");
-    private static final Pattern P_SIDE    = Pattern.compile("\"side\"\\s*:\\s*\"([^\"]+)\"");
-    private static final Pattern P_LEVEL   = Pattern.compile("\"level\"\\s*:\\s*(\\d+)");
-    private static final Pattern P_DUR     = Pattern.compile("\"durationMs\"\\s*:\\s*(\\d+)");
-    private static final Pattern P_TP      = Pattern.compile("\"testPeriodMs\"\\s*:\\s*(\\d+)");
-    private static final Pattern P_TF      = Pattern.compile("\"testFailAfterMs\"\\s*:\\s*(\\d+)");
+    private static final Pattern P_TYPE = Pattern.compile("\"type\"\\s*:\\s*\"([^\"]+)\"");
+    private static final Pattern P_HUBID = Pattern.compile("\"hubId\"\\s*:\\s*\"([^\"]+)\"");
+    private static final Pattern P_READER = Pattern.compile("\"readerId\"\\s*:\\s*\"([^\"]+)\"");
+    private static final Pattern P_SIDE = Pattern.compile("\"side\"\\s*:\\s*\"([^\"]+)\"");
+    private static final Pattern P_LEVEL = Pattern.compile("\"level\"\\s*:\\s*(\\d+)");
+    private static final Pattern P_DUR = Pattern.compile("\"durationMs\"\\s*:\\s*(\\d+)");
+    private static final Pattern P_TP = Pattern.compile("\"testPeriodMs\"\\s*:\\s*(\\d+)");
+    private static final Pattern P_TF = Pattern.compile("\"testFailAfterMs\"\\s*:\\s*(\\d+)");
+    private static volatile WebSocket ws;
+    private static volatile int reconnectDelaySec = RECONNECT_MIN_SEC;
+    private HubWsClient() {
+    }
 
-    private HubWsClient() {}
+    private static String wsUrl() {
+        return HubModConfig.get().wsUrl;
+    }
 
     public static void start() {
         connect();
@@ -134,7 +127,7 @@ public final class HubWsClient {
                             }
 
                             String text;
-                            if (partial.length() > 0) {
+                            if (!partial.isEmpty()) {
                                 partial.append(part);
                                 text = partial.toString();
                                 partial.setLength(0);
@@ -192,7 +185,6 @@ public final class HubWsClient {
 
         if ("SET_READER_OUTPUT".equalsIgnoreCase(type)) {
             handleSetReaderOutput(s);
-            return;
         }
 
         // CONFIG пока не используем, но оставим хук на будущее

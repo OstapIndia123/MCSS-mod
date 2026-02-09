@@ -6,7 +6,8 @@ import net.minecraft.server.MinecraftServer;
 public final class ServerRef {
     private static volatile MinecraftServer server;
 
-    private ServerRef() {}
+    private ServerRef() {
+    }
 
     public static void init() {
         ServerLifecycleEvents.SERVER_STARTED.register(s -> server = s);

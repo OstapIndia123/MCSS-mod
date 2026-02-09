@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jspecify.annotations.NonNull;
 
 public class ReaderBlock extends Block implements EntityBlock {
 
@@ -38,8 +39,8 @@ public class ReaderBlock extends Block implements EntityBlock {
     // Плашка толщиной 2/16 на "северной" стороне модели (z=0..2)
     private static final VoxelShape SHAPE_NORTH = Block.box(0, 0, 0, 16, 16, 2);
     private static final VoxelShape SHAPE_SOUTH = Block.box(0, 0, 14, 16, 16, 16);
-    private static final VoxelShape SHAPE_WEST  = Block.box(0, 0, 0, 2, 16, 16);
-    private static final VoxelShape SHAPE_EAST  = Block.box(14, 0, 0, 16, 16, 16);
+    private static final VoxelShape SHAPE_WEST = Block.box(0, 0, 0, 2, 16, 16);
+    private static final VoxelShape SHAPE_EAST = Block.box(14, 0, 0, 16, 16, 16);
 
     public ReaderBlock(Properties props) {
         super(props.noOcclusion());
@@ -75,48 +76,48 @@ public class ReaderBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos,
-                                 Direction dir, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
+    public @NonNull BlockState updateShape(BlockState state, @NonNull LevelReader level, @NonNull ScheduledTickAccess tickAccess, @NonNull BlockPos pos,
+                                           @NonNull Direction dir, @NonNull BlockPos neighborPos, @NonNull BlockState neighborState, @NonNull RandomSource random) {
         if (!state.canSurvive(level, pos)) return Blocks.AIR.defaultBlockState();
         return super.updateShape(state, level, tickAccess, pos, dir, neighborPos, neighborState, random);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+    public @NonNull VoxelShape getShape(BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext ctx) {
         return switch (state.getValue(FACING)) {
             case NORTH -> SHAPE_NORTH;
             case SOUTH -> SHAPE_SOUTH;
-            case WEST  -> SHAPE_WEST;
-            case EAST  -> SHAPE_EAST;
+            case WEST -> SHAPE_WEST;
+            case EAST -> SHAPE_EAST;
             default -> SHAPE_NORTH;
         };
     }
 
     // --- Redstone output: уровень из BlockEntity ---
     @Override
-    public boolean isSignalSource(BlockState state) {
+    public boolean isSignalSource(@NonNull BlockState state) {
         return true;
     }
 
     @Override
-    public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir) {
+    public int getSignal(@NonNull BlockState state, BlockGetter level, @NonNull BlockPos pos, @NonNull Direction dir) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof ReaderBlockEntity r) return r.getOutputLevel();
         return 0;
     }
 
     @Override
-    public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir) {
+    public int getDirectSignal(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull Direction dir) {
         return getSignal(state, level, pos, dir);
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
         return new ReaderBlockEntity(pos, state);
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, @NonNull BlockState state, @NonNull BlockEntityType<T> type) {
         if (level.isClientSide()) return null;
         return (lvl, p, st, be) -> {
             if (be instanceof ReaderBlockEntity reader) ReaderBlockEntity.tickServer(lvl, p, st, reader);
@@ -124,7 +125,7 @@ public class ReaderBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+    public void setPlacedBy(@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state, LivingEntity placer, @NonNull ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
 
         if (!level.isClientSide()) {
@@ -137,8 +138,8 @@ public class ReaderBlock extends Block implements EntityBlock {
         }
     }
 
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-                                         Player player, InteractionHand hand, BlockHitResult hit) {
+    protected @NonNull InteractionResult useItemOn(@NonNull ItemStack stack, @NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+                                                   @NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit) {
         return handleUse(level, pos, player, stack);
     }
 

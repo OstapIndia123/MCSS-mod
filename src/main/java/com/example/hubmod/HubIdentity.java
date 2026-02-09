@@ -2,7 +2,10 @@ package com.example.hubmod;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +21,8 @@ public final class HubIdentity {
 
     private static volatile String hubId;
 
-    private HubIdentity() {}
+    private HubIdentity() {
+    }
 
     public static String getHubId() {
         if (hubId != null) return hubId;

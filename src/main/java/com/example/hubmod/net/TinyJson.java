@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class TinyJson {
-    private TinyJson() {}
+    private TinyJson() {
+    }
 
     // Очень простой парсер под формат объект с примитивами + вложенный объект ports
     public static Map<String, Object> parseObject(String json) {

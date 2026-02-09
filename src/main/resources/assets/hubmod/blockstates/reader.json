@@ -1,8 +1,19 @@
 {
   "variants": {
-    "facing=north": { "model": "hubmod:block/reader"},
-    "facing=south": { "model": "hubmod:block/reader", "y": 180 },
-    "facing=west":  { "model": "hubmod:block/reader", "y": 270 },
-    "facing=east":  { "model": "hubmod:block/reader", "y": 90 }
+    "facing=north": {
+      "model": "hubmod:block/reader"
+    },
+    "facing=south": {
+      "model": "hubmod:block/reader",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "hubmod:block/reader",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "hubmod:block/reader",
+      "y": 90
+    }
   }
 }
